@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Flujo Interactivo: Proceso de Vinculación a Seguridad Social en Colombia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .main-container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .flow-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        
+        .flow-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color) 0%, var(--card-color-light) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        
+        .flow-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .flow-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.15),
+                0 0 60px rgba(var(--card-rgb), 0.3);
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .arrow-container {
+            position: relative;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .animated-arrow {
+            animation: bounceDown 1.5s infinite;
+        }
+        
+        @keyframes bounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+        
+        .accordion-header {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .accordion-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        
+        .accordion-header:hover::after {
+            transform: translateX(100%);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+        
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            opacity: 1;
+        }
+        
+        .accordion-item.active .accordion-header svg.arrow {
+            transform: rotate(180deg);
+        }
+        
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        .process-type-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .process-type-card:hover {
+            transform: translateY(-5px);
+            border-color: currentColor;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .process-type-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .process-type-card:hover::before {
+            opacity: 1;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .link-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .link-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+        
+        .link-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .tooltip {
+            position: relative;
+        }
+        
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .tooltip:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
+        }
+        
+        .progress-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            transform: translateX(5px);
+        }
+        
+        .progress-step.active .progress-circle {
+            background: #10b981;
+            animation: pulse 1s infinite;
+        }
+        
+        .progress-circle {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            margin-right: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        @media (max-width: 768px) {
+            .progress-indicator {
+                display: none;
+            }
+        }
+        
+        .floating-icon {
+            position: absolute;
+            animation: float 3s ease-in-out infinite;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        .card-1 { --card-color: #ef4444; --card-color-light: #fca5a5; --card-rgb: 239, 68, 68; }
+        .card-2 { --card-color: #6b7280; --card-color-light: #9ca3af; --card-rgb: 107, 114, 128; }
+        .card-3 { --card-color: #3b82f6; --card-color-light: #93bbfc; --card-rgb: 59, 130, 246; }
+        .card-4 { --card-color: #8b5cf6; --card-color-light: #c4b5fd; --card-rgb: 139, 92, 246; }
+        .card-5 { --card-color: #10b981; --card-color-light: #6ee7b7; --card-rgb: 16, 185, 129; }
+    </style>
+</head>
+<body>
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+        <h3 class="text-sm font-bold text-gray-700 mb-3">Progreso del Proceso</h3>
+        <div class="progress-step active" data-step="1">
+            <div class="progress-circle"></div>
+            <span class="text-xs text-gray-600">Contratación</span>
+        </div>
+        <div class="progress-step" data-step="2">
+            <div class="progress-circle"></div>
+            <span class="text-xs text-gray-600">Documentación</span>
+        </div>
+        <div class="progress-step" data-step="3">
+            <div class="progress-circle"></div>
+            <span class="text-xs text-gray-600">Afiliación</span>
+        </div>
+        <div class="progress-step" data-step="4">
+            <div class="progress-circle"></div>
+            <span class="text-xs text-gray-600">Pago</span>
+        </div>
+        <div class="progress-step" data-step="5">
+            <div class="progress-circle"></div>
+            <span class="text-xs text-gray-600">Finalización</span>
+        </div>
+    </div>
+
+    <div class="main-container min-h-screen w-full flex items-center justify-center p-6">
+        <!-- Floating Icons -->
+        <i class="fas fa-file-contract floating-icon text-6xl text-white" style="top: 10%; left: 5%;"></i>
+        <i class="fas fa-shield-alt floating-icon text-5xl text-white" style="top: 20%; right: 10%; animation-delay: 1s;"></i>
+        <i class="fas fa-users floating-icon text-6xl text-white" style="bottom: 15%; left: 8%; animation-delay: 2s;"></i>
+        
+        <div class="w-full max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg">
+                    <i class="fas fa-sitemap mr-3"></i>
+                    Diagrama de Flujo del Proceso
+                </h1>
+                <p class="text-xl text-gray-100 drop-shadow">
+                    Contratación y Vinculación al Sistema de Seguridad Social en Colombia
+                </p>
+                <div class="mt-4 flex justify-center gap-4">
+                    <span class="badge bg-blue-500 text-white">
+                        <i class="fas fa-laptop mr-1"></i> Proceso Digital
+                    </span>
+                    <span class="badge bg-orange-500 text-white">
+                        <i class="fas fa-hand-paper mr-1"></i> Proceso Manual
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center space-y-6">
+                
+                <!-- Step 1: Inicio -->
+                <div class="flow-card card-1 p-8 rounded-3xl shadow-2xl w-full max-w-2xl" data-step="1">
+                    <div class="flex items-start">
+                        <div class="step-number bg-gradient-to-br from-red-500 to-pink-500 text-white">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="ml-6 flex-1">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">
+                                Inicio: Contratación Laboral
+                            </h2>
+                            <p class="text-gray-600 leading-relaxed">
+                                El proceso comienza cuando se establece una relación laboral entre el empleador y el trabajador. 
+                                Es fundamental formalizar esta relación mediante un contrato de trabajo.
+                            </p>
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full">
+                                    <i class="fas fa-clock mr-1"></i> Tiempo estimado: 1-2 días
+                                </span>
+                                <span class="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full">
+                                    <i class="fas fa-exclamation-circle mr-1"></i> Obligatorio
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow with animation -->
+                <div class="arrow-container">
+                    <svg class="animated-arrow w-12 h-12 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                </div>
+
+                <!-- Step 2: Plantillas y Modelos -->
+                <div class="flow-card card-2 p-8 rounded-3xl shadow-2xl w-full max-w-2xl" data-step="2">
+                    <div class="flex items-start">
+                        <div class="step-number bg-gradient-to-br from-gray-500 to-gray-700 text-white">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="ml-6 flex-1">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">
+                                Herramientas y Documentación
+                            </h2>
+                            <p class="text-gray-600 mb-6">
+                                Utiliza estas plantillas oficiales para formalizar correctamente el contrato de trabajo y preparar los aportes.
+                            </p>
+                            <div class="grid md:grid-cols-2 gap-3">
+                                <a href="https://docs.google.com/document/d/1qQwUVKISeaGmghGjnr3oak04lsHMgdAp/export?format=doc" 
+                                   target="_blank" 
+                                   class="link-button group flex items-center bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 p-4 rounded-xl transition-all">
+                                    <i class="fas fa-file-word text-blue-600 text-2xl mr-3"></i>
+                                    <div>
+                                        <div class="font-semibold text-gray-800 group-hover:text-blue-600 transition">Contrato Indefinido</div>
+                                        <div class="text-xs text-gray-500">Formato Word</div>
+                                    </div>
+                                </a>
+                                <a href="https://docs.google.com/document/d/1AbyBDoazehT4ptPT1msBgPM9VA-KK78K/export?format=doc" 
+                                   target="_blank" 
+                                   class="link-button group flex items-center bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 p-4 rounded-xl transition-all">
+                                    <i class="fas fa-file-word text-blue-600 text-2xl mr-3"></i>
+                                    <div>
+                                        <div class="font-semibold text-gray-800 group-hover:text-blue-600 transition">Contrato Término Fijo</div>
+                                        <div class="text-xs text-gray-500">Formato Word</div>
+                                    </div>
+                                </a>
+                                <a href="https://docs.google.com/spreadsheets/d/1gw_Z5VGe-snjYdY8QhZy20hbdfPJTj5c/export?format=xlsx" 
+                                   target="_blank" 
+                                   class="link-button group flex items-center bg-gradient-to-r from-green-100 to-green-200 hover:from-green-200 hover:to-green-300 p-4 rounded-xl transition-all md:col-span-2">
+                                    <i class="fas fa-file-excel text-green-600 text-2xl mr-3"></i>
+                                    <div>
+                                        <div class="font-semibold text-gray-800 group-hover:text-green-600 transition">Plantilla de Aportes</div>
+                                        <div class="text-xs text-gray-500">Formato Excel - Cálculo automático</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <svg class="animated-arrow w-12 h-12 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                </div>
+
+                <!-- Step 3: Afiliación - ENHANCED -->
+                <div class="flow-card card-3 p-8 rounded-3xl shadow-2xl w-full max-w-6xl" data-step="3">
+                    <div class="flex items-start mb-6">
+                        <div class="step-number bg-gradient-to-br from-blue-500 to-cyan-500 text-white">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="ml-6">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                                Proceso de Afiliación al Sistema
+                            </h2>
+                            <p class="text-gray-600">
+                                Selecciona la modalidad de afiliación según tu preferencia y capacidad tecnológica.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <!-- Afiliación Centralizada -->
+                        <div class="process-type-card bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-2xl border-blue-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Vía Centralizada</h3>
+                                    <span class="badge bg-blue-500 text-white text-xs">100% Digital</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-4">
+                                Plataforma unificada del gobierno para gestionar todas las afiliaciones en un solo lugar.
+                            </p>
+                            
+                            <a href="https://www.miseguridadsocial.gov.co/" 
+                               target="_blank" 
+                               class="link-button block bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white p-4 rounded-xl font-semibold text-center transition-all transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-external-link-alt mr-2"></i>
+                                Mi Seguridad Social (SAT)
+                            </a>
+                            
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Proceso más rápido
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Todo en un solo portal
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    Sin papeleos
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Afiliación Directa Digital -->
+                        <div class="process-type-card bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border-purple-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Vía Directa Digital</h3>
+                                    <span class="badge bg-purple-500 text-white text-xs">Portal Web</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-4">
+                                Ingresa directamente al portal web de cada entidad para realizar la afiliación.
+                            </p>
+                            
+                            <div class="space-y-2" id="accordion-container">
+                                <!-- EPS Accordion -->
+                                <div class="accordion-item bg-white rounded-xl shadow-sm border border-gray-100">
+                                    <div class="accordion-header flex justify-between items-center p-4 hover:bg-purple-50 rounded-xl">
+                                        <span class="font-semibold text-purple-800 flex items-center">
+                                            <i class="fas fa-hospital mr-2"></i> EPS - Salud
+                                        </span>
+                                        <svg class="arrow w-5 h-5 text-purple-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="accordion-content px-4">
+                                        <div class="grid grid-cols-2 gap-2 text-sm">
+                                            <a href="https://www.epssura.com/" target="_blank" class="hover:bg-purple-50 p-2 rounded text-purple-700 hover:text-purple-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> SURA EPS
+                                            </a>
+                                            <a href="https://www.compensar.com/salud" target="_blank" class="hover:bg-purple-50 p-2 rounded text-purple-700 hover:text-purple-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Compensar
+                                            </a>
+                                            <a href="https://www.saludtotal.com.co/" target="_blank" class="hover:bg-purple-50 p-2 rounded text-purple-700 hover:text-purple-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Salud Total
+                                            </a>
+                                            <a href="https://www.nuevaeps.com.co/" target="_blank" class="hover:bg-purple-50 p-2 rounded text-purple-700 hover:text-purple-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Nueva EPS
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- ARL Accordion -->
+                                <div class="accordion-item bg-white rounded-xl shadow-sm border border-gray-100">
+                                    <div class="accordion-header flex justify-between items-center p-4 hover:bg-amber-50 rounded-xl">
+                                        <span class="font-semibold text-amber-800 flex items-center">
+                                            <i class="fas fa-hard-hat mr-2"></i> ARL - Riesgos
+                                        </span>
+                                        <svg class="arrow w-5 h-5 text-amber-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="accordion-content px-4">
+                                        <div class="grid grid-cols-2 gap-2 text-sm">
+                                            <a href="https://www.arlsura.com/" target="_blank" class="hover:bg-amber-50 p-2 rounded text-amber-700 hover:text-amber-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> ARL SURA
+                                            </a>
+                                            <a href="https://www.positiva.gov.co/" target="_blank" class="hover:bg-amber-50 p-2 rounded text-amber-700 hover:text-amber-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Positiva
+                                            </a>
+                                            <a href="https://www.colmenaseguros.com/" target="_blank" class="hover:bg-amber-50 p-2 rounded text-amber-700 hover:text-amber-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Colmena
+                                            </a>
+                                            <a href="https://www.axacolpatria.co/" target="_blank" class="hover:bg-amber-50 p-2 rounded text-amber-700 hover:text-amber-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> AXA Colpatria
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Pensiones Accordion -->
+                                <div class="accordion-item bg-white rounded-xl shadow-sm border border-gray-100">
+                                    <div class="accordion-header flex justify-between items-center p-4 hover:bg-emerald-50 rounded-xl">
+                                        <span class="font-semibold text-emerald-800 flex items-center">
+                                            <i class="fas fa-piggy-bank mr-2"></i> Pensiones
+                                        </span>
+                                        <svg class="arrow w-5 h-5 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="accordion-content px-4">
+                                        <div class="grid grid-cols-2 gap-2 text-sm">
+                                            <a href="https://www.colpensiones.gov.co/" target="_blank" class="hover:bg-emerald-50 p-2 rounded text-emerald-700 hover:text-emerald-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Colpensiones
+                                            </a>
+                                            <a href="https://www.proteccion.com/" target="_blank" class="hover:bg-emerald-50 p-2 rounded text-emerald-700 hover:text-emerald-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Protección
+                                            </a>
+                                            <a href="https://www.porvenir.com.co/" target="_blank" class="hover:bg-emerald-50 p-2 rounded text-emerald-700 hover:text-emerald-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Porvenir
+                                            </a>
+                                            <a href="https://www.colfondos.com.co/" target="_blank" class="hover:bg-emerald-50 p-2 rounded text-emerald-700 hover:text-emerald-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Colfondos
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Cajas Accordion -->
+                                <div class="accordion-item bg-white rounded-xl shadow-sm border border-gray-100">
+                                    <div class="accordion-header flex justify-between items-center p-4 hover:bg-indigo-50 rounded-xl">
+                                        <span class="font-semibold text-indigo-800 flex items-center">
+                                            <i class="fas fa-hands-helping mr-2"></i> Cajas
+                                        </span>
+                                        <svg class="arrow w-5 h-5 text-indigo-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="accordion-content px-4">
+                                        <div class="grid grid-cols-2 gap-2 text-sm">
+                                            <a href="https://www.compensar.com/" target="_blank" class="hover:bg-indigo-50 p-2 rounded text-indigo-700 hover:text-indigo-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Compensar
+                                            </a>
+                                            <a href="https://www.cafam.com.co/" target="_blank" class="hover:bg-indigo-50 p-2 rounded text-indigo-700 hover:text-indigo-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Cafam
+                                            </a>
+                                            <a href="https://www.colsubsidio.com/" target="_blank" class="hover:bg-indigo-50 p-2 rounded text-indigo-700 hover:text-indigo-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Colsubsidio
+                                            </a>
+                                            <a href="https://www.comfenalcoantioquia.com.co/" target="_blank" class="hover:bg-indigo-50 p-2 rounded text-indigo-700 hover:text-indigo-900 transition">
+                                                <i class="fas fa-link text-xs mr-1"></i> Comfenalco
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Afiliación Manual -->
+                        <div class="process-type-card bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-2xl border-orange-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg text-gray-800">Vía Manual</h3>
+                                    <span class="badge bg-orange-500 text-white text-xs">Presencial</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-4">
+                                Proceso tradicional con documentos físicos y atención personalizada.
+                            </p>
+                            
+                            <div class="bg-white rounded-xl p-4 shadow-sm border border-orange-100">
+                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                    <i class="fas fa-clipboard-list mr-2 text-orange-500"></i>
+                                    Pasos del Proceso Manual
+                                </h4>
+                                <ol class="space-y-3 text-sm text-gray-600">
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">1</span>
+                                        <span>Descargar o solicitar formularios físicos en cada entidad</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">2</span>
+                                        <span>Diligenciar formularios a mano con todos los datos</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">3</span>
+                                        <span>Anexar fotocopias de documentos (cédula, RUT, etc.)</span>
+                                    </li>
+                                </ol>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-2 gap-3">
+                                <div class="bg-orange-100 p-3 rounded-lg text-center">
+                                    <i class="fas fa-user-tie text-orange-600 text-2xl mb-2"></i>
+                                    <p class="text-xs font-semibold text-gray-700">Opción 1</p>
+                                    <p class="text-xs text-gray-600">Ir a oficina física</p>
+                                </div>
+                                <div class="bg-orange-100 p-3 rounded-lg text-center">
+                                    <i class="fas fa-home text-orange-600 text-2xl mb-2"></i>
+                                    <p class="text-xs font-semibold text-gray-700">Opción 2</p>
+                                    <p class="text-xs text-gray-600">Visita de asesor</p>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 bg-orange-100 p-3 rounded-lg">
+                                <p class="text-xs text-orange-800">
+                                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                                    <strong>Importante:</strong> Este proceso debe repetirse para cada entidad (EPS, ARL, AFP, Caja)
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <svg class="animated-arrow w-12 h-12 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                </div>
+
+                <!-- Step 4: PILA - ENHANCED -->
+                <div class="flow-card card-4 p-8 rounded-3xl shadow-2xl w-full max-w-4xl" data-step="4">
+                    <div class="flex items-start mb-6">
+                        <div class="step-number bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="ml-6">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                                Liquidación y Pago de Aportes (PILA)
+                            </h2>
+                            <p class="text-gray-600">
+                                Realiza el pago mensual de los aportes a seguridad social de manera segura.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- Pago Digital -->
+                        <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-2xl border-2 border-purple-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-laptop"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-gray-800">Pago Digital</h3>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-4">
+                                Genera la planilla y paga en línea mediante PSE o tarjeta de crédito.
+                            </p>
+                            
+                            <div class="space-y-3">
+                                <a href="https://www.miplanilla.com/" 
+                                   target="_blank" 
+                                   class="link-button flex items-center justify-between bg-white hover:bg-purple-100 p-4 rounded-xl transition-all group border border-purple-200">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-invoice-dollar text-purple-600 text-xl mr-3"></i>
+                                        <div>
+                                            <div class="font-semibold text-gray-800">Mi Planilla</div>
+                                            <div class="text-xs text-gray-500">Operador PILA líder</div>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-purple-600 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                                
+                                <a href="https://www.aportesenlinea.com/" 
+                                   target="_blank" 
+                                   class="link-button flex items-center justify-between bg-white hover:bg-purple-100 p-4 rounded-xl transition-all group border border-purple-200">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-file-invoice-dollar text-purple-600 text-xl mr-3"></i>
+                                        <div>
+                                            <div class="font-semibold text-gray-800">Aportes en Línea</div>
+                                            <div class="text-xs text-gray-500">Simple Operador SOI</div>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-arrow-right text-purple-600 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                                    <i class="fas fa-check mr-1"></i> Inmediato
+                                </span>
+                                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                                    <i class="fas fa-check mr-1"></i> Certificado al instante
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Pago Manual/Asistido -->
+                        <div class="bg-gradient-to-br from-orange-50 to-yellow-50 p-6 rounded-2xl border-2 border-orange-200">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white mr-3">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <h3 class="font-bold text-lg text-gray-800">Pago Manual/Asistido</h3>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 mb-4">
+                                Genera un PIN telefónicamente y paga en puntos físicos autorizados.
+                            </p>
+                            
+                            <div class="bg-white rounded-xl p-4 border border-orange-100">
+                                <h4 class="font-semibold text-gray-700 mb-3">
+                                    <i class="fas fa-list-ol mr-2 text-orange-500"></i>
+                                    Proceso paso a paso:
+                                </h4>
+                                <ol class="space-y-2 text-sm text-gray-600">
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">1</span>
+                                        <span>Llamar a la línea de atención del operador PILA</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">2</span>
+                                        <span>Solicitar pago asistido con un asesor telefónico</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">3</span>
+                                        <span>Recibir PIN de pago por SMS o correo</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="bg-orange-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs mr-2 flex-shrink-0 mt-0.5">4</span>
+                                        <span>Pagar en bancos, Baloto, Efecty o puntos autorizados</span>
+                                    </li>
+                                </ol>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-3 gap-2 text-center">
+                                <div class="bg-orange-100 p-2 rounded-lg">
+                                    <i class="fas fa-university text-orange-600 text-xl"></i>
+                                    <p class="text-xs mt-1">Bancos</p>
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg">
+                                    <i class="fas fa-store text-orange-600 text-xl"></i>
+                                    <p class="text-xs mt-1">Baloto</p>
+                                </div>
+                                <div class="bg-orange-100 p-2 rounded-lg">
+                                    <i class="fas fa-money-bill-wave text-orange-600 text-xl"></i>
+                                    <p class="text-xs mt-1">Efecty</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="arrow-container">
+                    <svg class="animated-arrow w-12 h-12 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                    </svg>
+                </div>
+
+                <!-- Step 5: Final - ENHANCED -->
+                <div class="flow-card card-5 p-8 rounded-3xl shadow-2xl w-full max-w-2xl" data-step="5">
+                    <div class="flex items-start">
+                        <div class="step-number bg-gradient-to-br from-green-500 to-emerald-500 text-white">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="ml-6 flex-1">
+                            <h2 class="text-2xl font-bold text-gray-800 mb-3">
+                                Proceso Completado
+                            </h2>
+                            <p class="text-gray-600 mb-4">
+                                Los aportes se distribuyen automáticamente a las entidades correspondientes, 
+                                garantizando la cobertura integral del trabajador en el sistema de seguridad social.
+                            </p>
+                            
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                                <h4 class="font-semibold text-gray-700 mb-3">
+                                    <i class="fas fa-shield-alt mr-2 text-green-600"></i>
+                                    Coberturas Activas:
+                                </h4>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-heartbeat text-red-500 mr-2"></i>
+                                        <span>Salud (EPS)</span>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-hard-hat text-amber-500 mr-2"></i>
+                                        <span>Riesgos Laborales (ARL)</span>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-piggy-bank text-emerald-500 mr-2"></i>
+                                        <span>Pensión (AFP)</span>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="fas fa-hands-helping text-indigo-500 mr-2"></i>
+                                        <span>Caja de Compensación</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 flex items-center justify-center">
+                                <div class="bg-green-500 text-white px-6 py-3 rounded-full font-semibold flex items-center">
+                                    <i class="fas fa-certificate mr-2"></i>
+                                    Trabajador Protegido
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="mt-12 text-center text-white">
+                <p class="text-sm opacity-80">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    Este diagrama representa el proceso estándar de afiliación al Sistema General de Seguridad Social en Colombia
+                </p>
+                 <p class="text-xs opacity-60 mt-4">
+                    © 2025 Arnold López Ayala. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Enhanced Accordion functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // Accordion
+            const accordionContainer = document.getElementById('accordion-container');
+            if (accordionContainer) {
+                accordionContainer.addEventListener('click', function(e) {
+                    const header = e.target.closest('.accordion-header');
+                    if (!header) return;
+                    
+                    const item = header.parentElement;
+                    const allItems = accordionContainer.querySelectorAll('.accordion-item');
+                    
+                    if (item.classList.contains('active')) {
+                        item.classList.remove('active');
+                    } else {
+                        allItems.forEach(i => i.classList.remove('active'));
+                        item.classList.add('active');
+                    }
+                });
+            }
+            
+            // Progress indicator scroll spy
+            const cards = document.querySelectorAll('.flow-card[data-step]');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            
+            const observerOptions = {
+                root: null,
+                rootMargin: '-50% 0px -50% 0px',
+                threshold: 0
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const step = entry.target.getAttribute('data-step');
+                        progressSteps.forEach(ps => {
+                            if (ps.getAttribute('data-step') === step) {
+                                ps.classList.add('active');
+                            } else if (ps.getAttribute('data-step') < step) {
+                                ps.classList.add('active');
+                            } else {
+                                ps.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            cards.forEach(card => observer.observe(card));
+            
+            // Smooth scroll animation for internal navigation
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNum = this.getAttribute('data-step');
+                    const targetCard = document.querySelector(`.flow-card[data-step="${stepNum}"]`);
+                    if (targetCard) {
+                        targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            });
+            
+            // Add entrance animations
+            const animateOnScroll = () => {
+                const elements = document.querySelectorAll('.flow-card');
+                elements.forEach((element, index) => {
+                    const rect = element.getBoundingClientRect();
+                    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                    
+                    if (isVisible && !element.classList.contains('animated')) {
+                        setTimeout(() => {
+                            element.style.opacity = '0';
+                            element.style.transform = 'translateY(30px)';
+                            element.classList.add('animated');
+                            
+                            setTimeout(() => {
+                                element.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                                element.style.opacity = '1';
+                                element.style.transform = 'translateY(0)';
+                            }, 100);
+                        }, index * 100);
+                    }
+                });
+            };
+            
+            // Initial check
+            animateOnScroll();
+            
+            // Check on scroll
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>
